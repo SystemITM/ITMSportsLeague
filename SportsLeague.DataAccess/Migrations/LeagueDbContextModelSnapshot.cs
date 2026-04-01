@@ -63,7 +63,7 @@ namespace SportsLeague.DataAccess.Migrations
                     b.HasIndex("TeamId", "Number")
                         .IsUnique();
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("SportsLeague.Domain.Entities.Team", b =>
@@ -107,7 +107,7 @@ namespace SportsLeague.DataAccess.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
                 });
 
             modelBuilder.Entity("SportsLeague.Domain.Entities.Player", b =>

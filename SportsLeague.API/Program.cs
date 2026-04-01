@@ -5,7 +5,6 @@ using SportsLeague.Domain.Interfaces.Repositories;
 using SportsLeague.Domain.Interfaces.Services;
 using SportsLeague.Domain.Services;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Entity Framework Core ──
@@ -16,9 +15,11 @@ builder.Services.AddDbContext<LeagueDbContext>(options =>
 // ── Repositories ──
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 
 // ── Services ──
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IPlayerService, PlayerService>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -37,22 +38,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
 }
-// ── Repositories ──
-
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-builder.Services.AddScoped<ITeamRepository, TeamRepository>();
-
-builder.Services.AddScoped<IPlayerRepository, PlayerRepository>(); // NUEVO
-
-
-// ── Services ──
-
-builder.Services.AddScoped<ITeamService, TeamService>();
-
-builder.Services.AddScoped<IPlayerService, PlayerService>(); // NUEVO
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 

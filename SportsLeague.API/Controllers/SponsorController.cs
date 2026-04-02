@@ -133,7 +133,7 @@ public class SponsorController : ControllerBase
         try
         {
             var links = await _sponsorService.GetTournamentsBySponsorAsync(id);
-            var responseDto = _mapper.Map<IEnumerable<TournamentSponsorResponseDTO>>(links);
+            var responseDto = _mapper.Map<IEnumerablehttp://localhost:5028/swagger/index.html<TournamentSponsorResponseDTO>>(links);
             return Ok(responseDto);
         }
         catch (KeyNotFoundException ex)

@@ -146,7 +146,10 @@ public class SponsorService : ISponsorService
             "Linking sponsor {SponsorId} to tournament {TournamentId}",
             sponsorId, tournamentId);
 
-        return await _tournamentSponsorRepository.CreateAsync(tournamentSponsor);
+        var createdLink = await _tournamentSponsorRepository.CreateAsync(tournamentSponsor);
+
+        return await _tournamentSponsorRepository.GetByIdWithDetailsAsync(createdLink.Id)
+               ?? throw new InvalidOperationException("No fue posible recuperar la vinculación creada");
     }
 
     public async Task<IEnumerable<TournamentSponsor>> GetTournamentsBySponsorAsync(int sponsorId)

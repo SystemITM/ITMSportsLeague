@@ -7,4 +7,5 @@ public interface ITournamentSponsorRepository : IGenericRepository<TournamentSpo
     Task<TournamentSponsor?> GetByTournamentAndSponsorAsync(int tournamentId, int sponsorId);
     Task<IEnumerable<TournamentSponsor>> GetBySponsorIdAsync(int sponsorId);
     Task<IEnumerable<TournamentSponsor>> GetByTournamentIdAsync(int tournamentId);
+    Task<TournamentSponsor?> GetByIdWithDetailsAsync(int id);
 }

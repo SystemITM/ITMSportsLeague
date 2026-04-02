@@ -24,6 +24,7 @@ public class TournamentSponsorRepository : GenericRepository<TournamentSponsor>,
         return await _dbSet
             .Where(ts => ts.SponsorId == sponsorId)
             .Include(ts => ts.Tournament)
+            .Include(ts => ts.Sponsor)
             .ToListAsync();
     }
 
@@ -31,7 +32,16 @@ public class TournamentSponsorRepository : GenericRepository<TournamentSponsor>,
     {
         return await _dbSet
             .Where(ts => ts.TournamentId == tournamentId)
+            .Include(ts => ts.Tournament)
             .Include(ts => ts.Sponsor)
             .ToListAsync();
+    }
+
+    public async Task<TournamentSponsor?> GetByIdWithDetailsAsync(int id)
+    {
+        return await _dbSet
+            .Include(ts => ts.Tournament)
+            .Include(ts => ts.Sponsor)
+            .FirstOrDefaultAsync(ts => ts.Id == id);
     }
 }

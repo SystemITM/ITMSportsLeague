@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using SportsLeague.DataAccess.Context;
 using SportsLeague.DataAccess.Repositories;
+using SportsLeague.DataAccess.Seeders;
 using SportsLeague.Domain.Helpers;
 using SportsLeague.Domain.Interfaces.Repositories;
 using SportsLeague.Domain.Interfaces.Services;
 using SportsLeague.Domain.Services;
-using SportsLeague.DataAccess.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,15 +21,20 @@ builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IRefereeRepository, RefereeRepository>();
 builder.Services.AddScoped<ITournamentRepository, TournamentRepository>();
 builder.Services.AddScoped<ITournamentTeamRepository, TournamentTeamRepository>();
-builder.Services.AddScoped<ISponsorRepository, SponsorRepository>(); //punto 4.4
-builder.Services.AddScoped<ITournamentSponsorRepository, TournamentSponsorRepository>(); //punto 4.4
+builder.Services.AddScoped<IMatchRepository, MatchRepository>();
+builder.Services.AddScoped<IMatchResultRepository, MatchResultRepository>();
+builder.Services.AddScoped<IGoalRepository, GoalRepository>();
+builder.Services.AddScoped<ICardRepository, CardRepository>();
 
 // ── Services ──
 builder.Services.AddScoped<ITeamService, TeamService>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRefereeService, RefereeService>();
 builder.Services.AddScoped<ITournamentService, TournamentService>();
-builder.Services.AddScoped<ISponsorService, SponsorService>(); //punto 4.5
+builder.Services.AddScoped<IMatchService, MatchService>();
+builder.Services.AddScoped<IMatchEventService, MatchEventService>();
+builder.Services.AddScoped<MatchValidationHelper>();
+builder.Services.AddScoped<IStandingsService, StandingsService>();
 
 // ── AutoMapper ──
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -43,22 +48,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// ── Data Seeder ── 
-
+// ── Data Seeder ──
 using (var scope = app.Services.CreateScope())
-
 {
-
     var context = scope.ServiceProvider
-
         .GetRequiredService<LeagueDbContext>();
 
-
-
-    await context.Database.MigrateAsync(); // Crea la BD + aplica migraciones 
-
+    await context.Database.MigrateAsync(); // Crea la BD + aplica migraciones
     await DataSeeder.SeedAsync(context);
-
 }
 
 // ── Middleware Pipeline ──
@@ -75,25 +72,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-// ── Repositories (agregar) ──
-builder.Services.AddScoped<IMatchRepository, MatchRepository>();
-
-// ── Services (agregar) ──
-builder.Services.AddScoped<IMatchService, MatchService>();
-
-// ── Repositories (agregar) ── 
-
-builder.Services.AddScoped<IMatchResultRepository, MatchResultRepository>();
-
-builder.Services.AddScoped<IGoalRepository, GoalRepository>();
-
-builder.Services.AddScoped<ICardRepository, CardRepository>();
-
-
-
-// ── Services (agregar) ── 
-
-builder.Services.AddScoped<IMatchEventService, MatchEventService>();
-
-builder.Services.AddScoped<MatchValidationHelper>();
